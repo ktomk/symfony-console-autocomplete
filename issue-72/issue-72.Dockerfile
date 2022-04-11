@@ -1,8 +1,11 @@
-FROM php:8.1-cli-alpine
+FROM php:8.1-fpm
 
-RUN apk add bash
+RUN set -ex; \
+    apt-get update; \
+    DEBIAN_FRONTEND=noninteractive apt-get install -yq zip; \
+    :
 
-RUN printf 'display_errors = STDERR\n' > /usr/local/etc/php/php.ini
+RUN printf 'display_errors = On\n' > /usr/local/etc/php/php.ini
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && curl -sSL "https://github.com/bamarni/symfony-console-autocomplete/archive/master.zip" > /tmp/symfony-console-autocomplete.zip \
