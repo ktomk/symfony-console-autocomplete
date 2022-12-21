@@ -7,8 +7,8 @@ PHP ?= php
 
 COMPOSER_EXECUTABLE := $(shell command -v $(COMPOSER_COMMAND) 2> /dev/null)
 COMPOSER_CMD := $(PHP) $(COMPOSER_EXECUTABLE)
-export COMPOSER_VENDOR_DIR := vendor-$(PHP).cached
-export COMPOSER := composer-$(PHP).cached.json
+export COMPOSER_VENDOR_DIR := vendor-$(PHP).cache
+export COMPOSER := composer-$(PHP).cache.json
 
 export PATH := $(PWD)/bin:$(dir $(BATS_TMP))local/bin:$(PWD)/tests/fixtures:$(PATH)
 
@@ -41,7 +41,7 @@ vendor : vendor/composer/installed.json $(COMPOSER) $(COMPOSER_VENDOR_DIR)/compo
 vendor/composer/installed.json : composer.json
 	COMPOSER=$< COMPOSER_VENDOR_DIR=$(dir $(@D)) $(COMPOSER_CMD) install
 
-composer-%.cached.json : composer.json
+composer-%.cache.json : composer.json
 	rm -f $@
 	cp $< $@
 
@@ -54,4 +54,4 @@ $(COMPOSER_VENDOR_DIR)/composer/installed.json : composer.json
 
 .PHONY : clean
 clean :
-	git clean -ffx build/* composer-*.cached* vendor-*.cached vendor/*
+	git clean -ffx build/* composer-*.cache* vendor-*.cache vendor/*
