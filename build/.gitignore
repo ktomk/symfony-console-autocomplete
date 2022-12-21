@@ -1,0 +1,6 @@
+# build targets are in their subdirectories
+
+# bats clone
+/bats/
+# bats install (/local/bin is within PATH at build time)
+/local/

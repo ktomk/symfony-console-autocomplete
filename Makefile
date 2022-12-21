@@ -1,5 +1,5 @@
 BATS_GIT := https://github.com/sstephenson/bats.git
-BATS_TMP := /tmp/bats
+BATS_TMP := build/bats
 COMPOSER_COMMAND ?= composer
 COMPOSER_OPTIONS ?= --prefer-source
 GIT ?= git
@@ -51,5 +51,4 @@ $(COMPOSER_VENDOR_DIR)/composer/installed.json : composer.json
 
 .PHONY : clean
 clean :
-	rm -rf -- $(BATS_TMP) $(dir $(BATS_TMP))local
-	git clean -ffx vendor-*.cached composer-*.cached*
+	git clean -ffx build/* composer-*.cached* vendor-*.cached vendor/*
