@@ -14,17 +14,29 @@ export PATH := $(PWD)/bin:$(dir $(BATS_TMP))local/bin:$(PWD)/tests/fixtures:$(PA
 
 
 .PHONY : all
-all : install test
+all : install-build-deps test
 
 .PHONY : test
 test : $(dir $(BATS_TMP))local/bin/bats vendor
 	bats tests
 
 .PHONY : install
-install : $(dir $(BATS_TMP))local/bin/bats vendor
+install : install-build-deps
+
+.PHONY : uninstall
+uninstall : clean uninstall-build-deps
+
+## install-build-deps : install build dependencies (bats)
+.PHONY : install-build-deps
+install-build-deps : $(dir $(BATS_TMP))local/bin/bats vendor
 	@$(PHP) --version | head -1
 	@$(COMPOSER_CMD) --version
 	@bats --version
+
+## uninstall-build-deps : uninstall build dependencies (bats)
+.PHONY : uninstall-build-deps
+uninstall-build-deps :
+	git clean -ffx build/bats build/local/bin/bats build/local/libexec build/local/share
 
 $(dir $(BATS_TMP))local/libexec/bats $(dir $(BATS_TMP))local/bin/bats : $(BATS_TMP)/.git/HEAD
 	mkdir -p $(dir $(BATS_TMP))local
@@ -54,4 +66,4 @@ $(COMPOSER_VENDOR_DIR)/composer/installed.json : composer.json
 
 .PHONY : clean
 clean :
-	git clean -ffx build/* composer-*.cache* vendor-*.cache vendor/*
+	git clean -ffx build/[ac-z]* composer-*.cache* vendor-*.cache vendor/*
