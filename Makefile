@@ -36,7 +36,10 @@ $(BATS_TMP)/.git/HEAD :
 	$(GIT) clone $(BATS_GIT) $(BATS_TMP)
 
 .PHONY : vendor
-vendor : $(COMPOSER) $(COMPOSER_VENDOR_DIR)/composer/installed.json
+vendor : vendor/composer/installed.json $(COMPOSER) $(COMPOSER_VENDOR_DIR)/composer/installed.json
+
+vendor/composer/installed.json : composer.json
+	COMPOSER=$< COMPOSER_VENDOR_DIR=$(dir $(@D)) $(COMPOSER_CMD) install
 
 composer-%.cached.json : composer.json
 	rm -f $@
